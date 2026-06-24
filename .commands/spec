@@ -1,0 +1,83 @@
+# Spec-Driven Workflow
+
+Use this for meaningful changes. For brainstorming, research, ideation, or
+prototyping, operate in Exploration Mode (bottom) instead.
+
+## 1. Spec first
+- All work begins from a specification. Never implement on assumptions, invent
+ requirements, infer business rules, or silently fill gaps.
+- If requirements are incomplete: stop, list what is missing, ask, and wait.
+- If no spec exists, draft one from my request and include it in the plan for
+ approval — don't dead-end demanding a spec, and don't start work without one.
+
+## 2. Repository & historical discovery
+Before planning, review: repo structure, README, architecture docs, ADRs,
+existing specs, relevant source, and prior `.changes/` documents for the area.
+Historical decisions are part of the requirements — never ignore documented
+context; reference it in the plan and the new change doc.
+
+## 3. Structured plan (HARD approval gate)
+Enter plan mode and present the plan through ExitPlanMode, so the harness itself
+blocks edits until I approve — do not rely on prose alone. The plan covers:
+- Objective — what problem is being solved
+- Scope — what will and will not change
+- Impact analysis — systems, files, dependencies, external integrations
+- Historical context — relevant prior `.changes`, ADRs, known constraints
+- Risks — failures, regressions, unknowns
+- Implementation steps
+- Validation strategy — unit, integration, manual
+- Documentation updates — required `.changes` docs
+
+After presenting the plan: STOP. This is a hard gate.
+- Do NOT continue under any circumstance until I explicitly approve the plan.
+- Do NOT proceed even partially — no edits, no scaffolding, no "small first
+ step", no setup work — until approval is explicitly given.
+- A question, a clarification, or silence is NOT approval. Only an explicit
+ "approved" / "go ahead" / equivalent counts.
+- Do not modify anything outside the approved plan. If new information appears,
+ stop, explain it, update the plan, and request approval again before doing
+ any work.
+
+## 4. Quality gate (HARD completion gate)
+The work is NOT complete, and you must NOT report it as done, until ALL of the
+following are actually satisfied:
+- Tests exist (unit + integration where applicable) and cover the change.
+- Lint, type-check, and the full relevant test suite were actually RUN and
+ passed — not assumed. If you could not run them, say so explicitly; never
+ claim a check passed that you did not execute.
+- Edge cases were considered and the validation performed is documented.
+
+Do not declare completion under any circumstance while any of the above is
+unmet. "Probably passes" or "should work" is not done.
+
+## 5. Change documentation (`.changes/`)
+Required for features, bug fixes, refactors, architectural / infra / DB
+changes, migrations, and significant discoveries. Skip for cosmetic/mechanical
+edits. The `.changes/` dir is for knowledge preservation only — keep it out of
+builds and deployment artifacts.
+
+Draft this doc as part of the plan (§3) and finalize it at completion with the
+real discoveries, decisions, and validation — those only exist after the work.
+
+Use today's date from the session context; if it's not there, get it with
+`date +%Y%m%d`; if there's no shell access either, ask me. Never guess it. Then
+name the file `.changes/YYYYMMDD_short_description.md` (e.g.
+`20260623_add_customer_search.md`). Structure:
+- Summary — problem, expected outcome, scope, out of scope
+- Requirements — functional, non-functional, constraints
+- Historical context — prior `.changes`, discoveries, decisions
+- Risks — known risks, side effects
+- Changes — important implementation details
+- Discoveries — new knowledge, hidden dependencies, unexpected findings
+- Decisions — choices made, alternatives considered, why
+- Tests — created tests and validation performed
+- Follow-ups — future improvements, tech debt, remaining concerns
+
+Write real context, reasoning, and decisions — not generic filler like "code
+was updated" or "tests were added". Explain WHY, not just WHAT.
+
+## Exploration Mode exception
+If I explicitly ask for brainstorming, research, ideation, prototyping,
+architecture exploration, or spec creation, you may proceed with incomplete
+requirements. Clearly label assumptions and uncertainties, and distinguish
+facts from hypotheses. Never present assumptions as facts.
